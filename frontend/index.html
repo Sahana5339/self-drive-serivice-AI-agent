@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Self-Drive Car Sharing Marketplace</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1><i class="fa-solid fa-car"></i> Car Management</h1>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="./pages/chat.html">Chat</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <div class="cars-header">
+        <h2>All Cars</h2>
+        <button class="btn" id="addCarBtn">
+          <i class="fa-solid fa-plus"></i> Add Car
+        </button>
+      </div>
+
+      <section id="carList" class="car-list">
+        <p>Loading cars...</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Car Management App. All rights reserved.</p>
+    </footer>
+
+    <!-- Modal -->
+    <div id="carModal" class="modal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Add New Car</h3>
+        <form id="carForm">
+          <div class="form-group">
+            <label for="company">Company Name</label>
+            <input type="text" id="company" name="company" required />
+          </div>
+          <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" id="model" name="model" required />
+          </div>
+          <div class="form-group">
+            <label for="kms">Kms Driven</label>
+            <input type="number" id="kms" name="kms" required />
+          </div>
+          <div class="form-group">
+            <label for="year">Year</label>
+
+            <input type="number" id="year" name="year" placeholder="YYYY" min="1900" max="2100" required />
+          </div>
+          <div class="form-group">
+            <label for="color">Color</label>
+            <input type="string" id="color" name="color" required />
+          </div>
+          <div class="form-group">
+            <p>Is Available?</p>
+            <div class="radio-wrapper">
+              <div class="radio">
+                <input
+                  type="radio"
+                  id="available"
+                  name="available"
+                  value="true"
+                />
+                <label for="available">Yes</label>
+              </div>
+              <div class="radio">
+                <input
+                  type="radio"
+                  id="notAvailable"
+                  name="available"
+                  value="false"
+                />
+                <label for="notAvailable">No</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn">Save</button>
+          <button type="button" class="btn" id="closeModalBtn">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="./scripts/main.js"></script>
+    <script type="module" src="./services/apiService.js"></script>
+  </body>
+</html>
