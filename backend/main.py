@@ -1,40 +1,40 @@
 import os
 import uvicorn
-from google.adk.cli.fast_api import get_fast_api_app
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from services.service import Service
 from routers import cars
+from routers import chat_gemini as chat
 from repos.repo import Repo
 from constants import DB_NAME
-
 
 repo = Repo(DB_NAME)
 service = Service(repo)
 
-# Get the directory where main.py is located
-AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Session service URI (e.g., SQLite)
-# SESSION_SERVICE_URI = "sqlite:///./sessions.db"
-
-# Configure allowed origins for CORS - Add your domains here
+# Configure allowed origins for CORS
 ALLOWED_ORIGINS = [
     "*"  # Only use this for development - remove for production
 ]
 
-# Set web=True if you intend to serve a web interface, False otherwise
-SERVE_WEB_INTERFACE = True
+# Create FastAPI app
+app = FastAPI(title="Car Management API")
 
-# Call the function to get the FastAPI app instance
-# The agent_dir should point to the directory containing main.py
-# ADK will automatically discover the weather_agent folder within it
-app = get_fast_api_app(
-    agents_dir=AGENT_DIR,  # This points to sample-agent-v2/ directory
-    # session_service_uri=SESSION_SERVICE_URI,
-    allow_origins=ALLOWED_ORIGINS,  # This is the key CORS configuration
-    web=SERVE_WEB_INTERFACE,
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
+# Include API routes first
 app.include_router(cars.router, prefix="/cars", tags=["Cars"])
+app.include_router(chat.router, tags=["Chat"])
+
+# Mount static files (frontend) - this should be last
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")
 
 if __name__ == "__main__":
     # Use the PORT environment variable provided by Cloud Run, defaulting to 8080

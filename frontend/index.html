@@ -25,25 +25,27 @@
 
     <main>
       <div class="cars-header">
-        <h2>All Cars</h2>
+        <h2><i class="fa-solid fa-cars"></i> Vehicle Fleet</h2>
         <button class="btn" id="addCarBtn">
-          <i class="fa-solid fa-plus"></i> Add Car
+          <i class="fa-solid fa-plus"></i> Add New Vehicle
         </button>
       </div>
 
       <section id="carList" class="car-list">
-        <p>Loading cars...</p>
+        <div class="loading">
+          <i class="fa-solid fa-car"></i> Loading vehicles...
+        </div>
       </section>
     </main>
 
     <footer>
-      <p>&copy; 2025 Car Management App. All rights reserved.</p>
+      <p><i class="fa-solid fa-heart"></i> &copy; 2025 Smart Car Management System. Built with AI Technology.</p>
     </footer>
 
     <!-- Modal -->
     <div id="carModal" class="modal">
       <div class="modal-content">
-        <h3 id="modalTitle">Add New Car</h3>
+        <h3 id="modalTitle"><i class="fa-solid fa-plus-circle"></i> Add New Vehicle</h3>
         <form id="carForm">
           <div class="form-group">
             <label for="company">Company Name</label>
@@ -89,8 +91,14 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="btn">Save</button>
-          <button type="button" class="btn" id="closeModalBtn">Cancel</button>
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button type="submit" class="btn" style="flex: 1;">
+              <i class="fa-solid fa-save"></i> Save Vehicle
+            </button>
+            <button type="button" class="btn" id="closeModalBtn" style="flex: 1; background: var(--color-muted);">
+              <i class="fa-solid fa-times"></i> Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>

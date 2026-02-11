@@ -5,7 +5,7 @@ azure-search-documents
 openai
 aiohttp
 requests
-google-adk
+google-auth
 python-dotenv
 python-multipart
 google-api-python-client 

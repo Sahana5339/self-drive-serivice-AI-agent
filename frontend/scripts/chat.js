@@ -259,14 +259,14 @@ async function sendMessage(text, attachedFile = null) {
   };
 
   try {
-    await ApiService.postWithStream("/run_sse", payload, async (chunk) => {
-      if (chunk && typeof chunk === "object") {
-        appendMessage(chunk.content, "model");
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-      }
-    });
+    const response = await ApiService.post("/run_sse", payload);
+    if (response && response.content) {
+      appendMessage(response.content, "model");
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
   } catch (err) {
     console.error("Chat error:", err);
+    appendMessage({parts: [{text: "Sorry, there was an error processing your message."}]}, "model");
   } finally {
     setSending(false);
   }

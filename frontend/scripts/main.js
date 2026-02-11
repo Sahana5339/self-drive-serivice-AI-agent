@@ -14,17 +14,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadCars() {
   try {
+    carList.innerHTML = `
+      <div class="loading">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading vehicles...
+      </div>
+    `;
     const cars = await ApiService.get("/cars/");
     renderCars(cars);
   } catch (error) {
     console.error("Error fetching cars:", error);
-    carList.innerHTML = `<p class="error-text">Failed to load cars.</p>`;
+    carList.innerHTML = `
+      <div style="text-align: center; padding: 2rem; color: var(--color-danger);">
+        <i class="fa-solid fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+        <p>Failed to load vehicles. Please try again.</p>
+      </div>
+    `;
   }
 }
 
 function renderCars(cars = []) {
   if (!cars.length) {
-    carList.innerHTML = `<p>No cars found. Add a new one!</p>`;
+    carList.innerHTML = `
+      <div style="text-align: center; padding: 3rem; color: var(--color-muted-dark);">
+        <i class="fa-solid fa-car" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+        <p style="font-size: 1.2rem;">No vehicles found. Add your first vehicle!</p>
+      </div>
+    `;
     return;
   }
 
@@ -33,17 +48,18 @@ function renderCars(cars = []) {
       (car) => `
         <div class="car-card">
           <div class="car-info">
-            <h3>${escapeHtml(car.company)}</h3>
-            <p><strong>Model:</strong> ${escapeHtml(car.model)}</p>
-            <p><strong>Kms Driven:</strong> ${escapeHtml(car.kms)}</p>
-            <p><strong>Year:</strong> ${escapeHtml(car.year)}</p>
-            <p><strong>Available:</strong> ${
-              car.available ? "✅ Yes" : "❌ No"
-            }</p>
+            <h3><i class="fa-solid fa-car"></i> ${escapeHtml(car.company)} ${escapeHtml(car.model)}</h3>
+            <p><i class="fa-solid fa-palette"></i> <strong>Color:</strong> ${escapeHtml(car.color)}</p>
+            <p><i class="fa-solid fa-road"></i> <strong>Mileage:</strong> ${escapeHtml(car.kms).toLocaleString()} km</p>
+            <p><i class="fa-solid fa-calendar"></i> <strong>Year:</strong> ${escapeHtml(car.year)}</p>
+            <span class="status ${car.available ? 'available' : 'unavailable'}">
+              <i class="fa-solid fa-${car.available ? 'check-circle' : 'times-circle'}"></i>
+              ${car.available ? 'Available' : 'Unavailable'}
+            </span>
           </div>
           <div class="car-actions">
             <button
-              class="btn-edit"
+              title="Edit Vehicle"
               data-action="edit"
               data-id="${car.id}"
               data-name="${escapeAttr(car.company)}"
@@ -53,14 +69,15 @@ function renderCars(cars = []) {
               data-color="${escapeAttr(car.color)}"
               data-available="${car.available}"
             >
-              <i class="fa-solid fa-pen"></i>
+              <i class="fa-solid fa-edit"></i>
             </button>
             <button
-              class="btn-delete"
+              title="Delete Vehicle"
+              class="delete"
               data-action="delete"
               data-id="${car.id}"
             >
-              <i class="fa-solid fa-trash"></i>
+              <i class="fa-solid fa-trash-alt"></i>
             </button>
           </div>
         </div>
@@ -75,7 +92,7 @@ closeModalBtn.addEventListener("click", () => closeModal());
 function openModal(car = null) {
   modal.style.display = "flex";
   if (car) {
-    modalTitle.textContent = "Edit Car";
+    modalTitle.innerHTML = '<i class="fa-solid fa-edit"></i> Edit Vehicle';
     document.getElementById("company").value = car.company;
     document.getElementById("model").value = car.model;
     document.getElementById("kms").value = car.kms;
@@ -85,7 +102,7 @@ function openModal(car = null) {
       (r) => (r.checked = r.value === car.available.toString())
     );
   } else {
-    modalTitle.textContent = "Add New Car";
+    modalTitle.innerHTML = '<i class="fa-solid fa-plus-circle"></i> Add New Vehicle';
     carForm.reset();
   }
 }
